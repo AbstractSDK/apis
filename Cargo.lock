@@ -1245,9 +1245,9 @@ dependencies = [
  "thiserror",
  "tokio",
  "wasmswap 1.1.2-beta",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-bundle",
- "wyndex-stake",
+ "wyndex-stake 2.0.2",
 ]
 
 [[package]]
@@ -1689,7 +1689,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "wasmswap 1.2.0",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-bundle",
 ]
 
@@ -4910,9 +4910,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "wynd-utils"
+version = "1.6.0"
+source = "git+https://github.com/cosmorama/wynddao.git?tag=v1.6.0#fe7c22942f578088c923932276ee8df640651ca7"
+dependencies = [
+ "cosmwasm-std",
+ "schemars",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
 name = "wyndex"
 version = "1.1.2"
 source = "git+https://github.com/cosmorama/wynddex.git?rev=v1.1.2#acca3311673d9d7c990a88d910f4a03a9acf25fd"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw-utils 1.0.1",
+ "cw20 1.0.1",
+ "cw20-base 1.0.1",
+ "itertools",
+ "thiserror",
+ "uint",
+]
+
+[[package]]
+name = "wyndex"
+version = "2.0.2"
+source = "git+https://github.com/cosmorama/wynddex.git?rev=v2.0.2#592cee00712aa0c7840afc2dbfcaeb4fec1c57d9"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -4942,11 +4969,11 @@ dependencies = [
  "cw-multi-test",
  "cw20 1.0.1",
  "cw20-base 1.0.1",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-factory",
  "wyndex-multi-hop",
  "wyndex-pair",
- "wyndex-stake",
+ "wyndex-stake 1.1.2",
 ]
 
 [[package]]
@@ -4962,8 +4989,8 @@ dependencies = [
  "cw2 1.0.1",
  "itertools",
  "thiserror",
- "wyndex",
- "wyndex-stake",
+ "wyndex 1.1.2",
+ "wyndex-stake 1.1.2",
 ]
 
 [[package]]
@@ -4977,7 +5004,7 @@ dependencies = [
  "cw2 1.0.1",
  "cw20 1.0.1",
  "thiserror",
- "wyndex",
+ "wyndex 1.1.2",
 ]
 
 [[package]]
@@ -4992,8 +5019,8 @@ dependencies = [
  "cw2 1.0.1",
  "cw20 1.0.1",
  "cw20-base 1.0.1",
- "wyndex",
- "wyndex-stake",
+ "wyndex 1.1.2",
+ "wyndex-stake 1.1.2",
 ]
 
 [[package]]
@@ -5010,8 +5037,26 @@ dependencies = [
  "cw20 1.0.1",
  "serde",
  "thiserror",
- "wynd-utils",
- "wyndex",
+ "wynd-utils 1.4.0",
+ "wyndex 1.1.2",
+]
+
+[[package]]
+name = "wyndex-stake"
+version = "2.0.2"
+source = "git+https://github.com/cosmorama/wynddex.git?rev=v2.0.2#592cee00712aa0c7840afc2dbfcaeb4fec1c57d9"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-controllers 1.0.1",
+ "cw-storage-plus 1.0.1",
+ "cw-utils 1.0.1",
+ "cw2 1.0.1",
+ "cw20 1.0.1",
+ "serde",
+ "thiserror",
+ "wynd-utils 1.6.0",
+ "wyndex 2.0.2",
 ]
 
 [[package]]
