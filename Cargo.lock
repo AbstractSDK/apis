@@ -1245,7 +1245,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "wasmswap 1.1.2-beta",
- "wyndex",
+ "wyndex 2.0.2",
  "wyndex-bundle",
  "wyndex-stake",
 ]
@@ -1689,7 +1689,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "wasmswap 1.2.0",
- "wyndex",
+ "wyndex 2.0.2",
  "wyndex-bundle",
 ]
 
@@ -4926,6 +4926,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "wyndex"
+version = "2.0.2"
+source = "git+https://github.com/cosmorama/wynddex.git?rev=v2.0.2#592cee00712aa0c7840afc2dbfcaeb4fec1c57d9"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw-utils 1.0.1",
+ "cw20 1.0.1",
+ "cw20-base 1.0.1",
+ "itertools",
+ "thiserror",
+ "uint",
+]
+
+[[package]]
 name = "wyndex-bundle"
 version = "0.2.0"
 source = "git+https://github.com/Abstract-OS/integration-bundles.git#c2816e638155b2f6a924e6789ce5cdbdcec76b19"
@@ -4942,7 +4958,7 @@ dependencies = [
  "cw-multi-test",
  "cw20 1.0.1",
  "cw20-base 1.0.1",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-factory",
  "wyndex-multi-hop",
  "wyndex-pair",
@@ -4962,7 +4978,7 @@ dependencies = [
  "cw2 1.0.1",
  "itertools",
  "thiserror",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-stake",
 ]
 
@@ -4977,7 +4993,7 @@ dependencies = [
  "cw2 1.0.1",
  "cw20 1.0.1",
  "thiserror",
- "wyndex",
+ "wyndex 1.1.2",
 ]
 
 [[package]]
@@ -4992,7 +5008,7 @@ dependencies = [
  "cw2 1.0.1",
  "cw20 1.0.1",
  "cw20-base 1.0.1",
- "wyndex",
+ "wyndex 1.1.2",
  "wyndex-stake",
 ]
 
@@ -5011,7 +5027,7 @@ dependencies = [
  "serde",
  "thiserror",
  "wynd-utils",
- "wyndex",
+ "wyndex 1.1.2",
 ]
 
 [[package]]
