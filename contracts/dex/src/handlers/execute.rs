@@ -29,17 +29,18 @@ pub fn execute_handler(
                 action,
             } = msg;
             let exchange = exchange_resolver::identify_exchange(&dex_name)?;
-            // if exchange is on an app-chain, execute the action on the app-chain
-            if exchange.over_ibc() {
-                handle_ibc_api_request(&deps, info, &api, dex_name, &action)
-            } else {
+
+            if exchange.is_deployed_locally(&env) {
                 // the action can be executed on the local chain
                 handle_local_api_request(deps, env, info, api, action, dex_name)
+            } else {
+                // the action needs to be executed on a remote chain
+                handle_ibc_api_request(&deps, info, &api, dex_name, &action)
             }
         }
         DexApiExecuteMsg::UpdateFee {
             swap_fee,
-            recipient_os_id,
+            recipient_account,
         } => {
             // only previous OS can change the owner
             api.account_registry(deps.as_ref())
@@ -50,9 +51,11 @@ pub fn execute_handler(
                 SWAP_FEE.save(deps.storage, &fee)?;
             }
 
-            if let Some(os_id) = recipient_os_id {
+            if let Some(account_id) = recipient_account {
                 let mut fee = SWAP_FEE.load(deps.storage)?;
-                let recipient = api.account_registry(deps.as_ref()).proxy_address(os_id)?;
+                let recipient = api
+                    .account_registry(deps.as_ref())
+                    .proxy_address(account_id)?;
                 fee.set_recipient(deps.api, recipient)?;
                 SWAP_FEE.save(deps.storage, &fee)?;
             }
@@ -70,7 +73,8 @@ fn handle_local_api_request(
     action: DexAction,
     exchange: String,
 ) -> DexResult {
-    let exchange = exchange_resolver::resolve_exchange(&exchange)?;
+    // construct local exchange
+    let exchange = exchange_resolver::resolve_exchange(&exchange, Some(api.target()?))?;
     let (msgs, _) = api.resolve_dex_action(deps.as_ref(), action, exchange)?;
     let proxy_msg = api.executor(deps.as_ref()).execute(msgs)?;
     Ok(Response::new().add_message(proxy_msg))

@@ -1,4 +1,4 @@
-use crate::dex_trait::Identify;
+use crate::dex_trait::{ChainName, DexName, Identify};
 
 #[cfg(feature = "osmosis")]
 use crate::{
@@ -34,11 +34,11 @@ pub struct Osmosis {
 }
 
 impl Identify for Osmosis {
-    fn over_ibc(&self) -> bool {
-        true
-    }
-    fn name(&self) -> &'static str {
+    fn name(&self) -> DexName {
         OSMOSIS
+    }
+    fn supported_chains(&self) -> &[&[ChainName]] {
+        &[abstract_core::OSMOSIS]
     }
 }
 
