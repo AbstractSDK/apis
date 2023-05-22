@@ -9,7 +9,7 @@ use abstract_sdk::{
 
 #[cfg(feature = "terra")]
 use astroport::generator::{
-    ConfigResponse, Cw20HookMsg, ExecuteMsg as GeneratorExecuteMsg, QueryMsg as GeneratorQueryMsg,
+    Config, Cw20HookMsg, ExecuteMsg as GeneratorExecuteMsg, QueryMsg as GeneratorQueryMsg,
     RewardInfoResponse,
 };
 
@@ -125,8 +125,8 @@ impl CwStakingAdapter for Astroport {
     }
 
     fn query_info(&self, querier: &QuerierWrapper) -> Result<StakingInfoResponse, StakingError> {
-        let ConfigResponse { astro_token, .. } = querier
-            .query_wasm_smart::<ConfigResponse>(
+        let Config { astro_token, .. } = querier
+            .query_wasm_smart::<Config>(
                 self.generator_contract_address.clone(),
                 &GeneratorQueryMsg::Config {},
             )
@@ -139,7 +139,7 @@ impl CwStakingAdapter for Astroport {
                 ))
             })?;
 
-        let astro_token = AssetInfo::cw20(astro_token);
+        let astro_token = astro_token;
 
         Ok(StakingInfoResponse {
             staking_contract_address: self.generator_contract_address.clone(),
@@ -204,10 +204,10 @@ impl CwStakingAdapter for Astroport {
                 ))
             })?;
 
-        let mut tokens = { vec![AssetInfo::Cw20(reward_info.base_reward_token)] };
+        let mut tokens = { vec![reward_info.base_reward_token] };
 
         if let Some(reward_token) = reward_info.proxy_reward_token {
-            tokens.push(AssetInfo::cw20(reward_token));
+            tokens.push(reward_token);
         }
         Ok(RewardTokensResponse { tokens })
     }
