@@ -239,7 +239,9 @@ impl DEX for Astroport {
         #[cfg(not(feature = "testing"))]
         let hook_msg = StubCw20HookMsg::WithdrawLiquidity {};
         #[cfg(feature = "testing")]
-        let hook_msg = astroport::pair::Cw20HookMsg::WithdrawLiquidity { assets: vec![AssetInfo:] };
+        let hook_msg = astroport::pair::Cw20HookMsg::WithdrawLiquidity {
+            assets: vec![AssetInfo:],
+        };
 
         let withdraw_msg = lp_token.send_msg(pair_address, to_binary(&hook_msg)?)?;
         Ok(vec![withdraw_msg])
@@ -270,9 +272,11 @@ impl DEX for Astroport {
     }
 }
 
-fn cw_assetinfo_to_astroport(asset_info: &AssetInfo) -> Result<astroport::asset::AssetInfo, DexError> {
+fn cw_assetinfo_to_astroport(
+    asset_info: &AssetInfo,
+) -> Result<astroport::asset::AssetInfo, DexError> {
     match asset_info {
-        AssetInfo::Native(denom ) => Ok(astroport::asset::AssetInfo::NativeToken {
+        AssetInfo::Native(denom) => Ok(astroport::asset::AssetInfo::NativeToken {
             denom: denom.clone(),
         }),
         AssetInfo::Cw20(contract_addr) => Ok(astroport::asset::AssetInfo::Token {

@@ -225,9 +225,13 @@ impl CwStakingAdapter for Astroport {
 //     }
 // }
 
-fn astroport_to_cw_assetinfo(asset_info: &astroport::asset::AssetInfo) -> Result<AssetInfo, StakingError> {
+fn astroport_to_cw_assetinfo(
+    asset_info: &astroport::asset::AssetInfo,
+) -> Result<AssetInfo, StakingError> {
     match asset_info {
         astroport::asset::AssetInfo::NativeToken { denom } => Ok(AssetInfo::Native(denom.clone())),
-        astroport::asset::AssetInfo::Token { contract_addr } => Ok(AssetInfo::Cw20(contract_addr.clone())),
+        astroport::asset::AssetInfo::Token { contract_addr } => {
+            Ok(AssetInfo::Cw20(contract_addr.clone()))
+        }
     }
 }
