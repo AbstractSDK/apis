@@ -1,0 +1,10 @@
+{
+  "neutron": {
+    "pion-1": {
+      "code_ids": {
+        "abstract:cw-staking": 557
+      },
+      "default": {}
+    }
+  }
+}
