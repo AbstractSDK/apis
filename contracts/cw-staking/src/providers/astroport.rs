@@ -139,7 +139,7 @@ impl CwStakingAdapter for Astroport {
                 ))
             })?;
 
-        let astro_token = astro_token;
+        let astro_token = astroport_to_cw_assetinfo(&astro_token)?;
 
         Ok(StakingInfoResponse {
             staking_contract_address: self.generator_contract_address.clone(),
@@ -204,11 +204,30 @@ impl CwStakingAdapter for Astroport {
                 ))
             })?;
 
-        let mut tokens = { vec![reward_info.base_reward_token] };
+        let mut tokens = { vec![astroport_to_cw_assetinfo(&reward_info.base_reward_token)?] };
 
         if let Some(reward_token) = reward_info.proxy_reward_token {
-            tokens.push(reward_token);
+            tokens.push(AssetInfo::Cw20(reward_token));
         }
         Ok(RewardTokensResponse { tokens })
+    }
+}
+
+// fn cw_assetinfo_to_astroport(asset_info: &AssetInfo) -> Result<astroport::asset::AssetInfo, StakingError> {
+//     match asset_info {
+//         AssetInfo::Native(denom ) => Ok(astroport::asset::AssetInfo::NativeToken {
+//             denom: denom.clone(),
+//         }),
+//         AssetInfo::Cw20(contract_addr) => Ok(astroport::asset::AssetInfo::Token {
+//             contract_addr: contract_addr.clone(),
+//         }),
+//         _ => todo!(),
+//     }
+// }
+
+fn astroport_to_cw_assetinfo(asset_info: &astroport::asset::AssetInfo) -> Result<AssetInfo, StakingError> {
+    match asset_info {
+        astroport::asset::AssetInfo::NativeToken { denom } => Ok(AssetInfo::Native(denom.clone())),
+        astroport::asset::AssetInfo::Token { contract_addr } => Ok(AssetInfo::Cw20(contract_addr.clone())),
     }
 }
