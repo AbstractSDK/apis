@@ -37,7 +37,7 @@ impl DEX for Astroport {
         _deps: Deps,
         pool_id: PoolAddress,
         offer_asset: Asset,
-        _ask_asset: AssetInfo,
+        ask_asset: AssetInfo,
         belief_price: Option<Decimal>,
         max_spread: Option<Decimal>,
     ) -> Result<Vec<CosmosMsg>, DexError> {
@@ -48,6 +48,7 @@ impl DEX for Astroport {
                 pair_address.to_string(),
                 &astroport::pair::ExecuteMsg::Swap {
                     offer_asset: cw_asset_to_astroport(&offer_asset)?,
+                    ask_asset_info: Some(cw_assetinfo_to_astroport(&ask_asset)?),
                     belief_price,
                     max_spread,
                     to: None,
@@ -63,6 +64,7 @@ impl DEX for Astroport {
                     msg: to_binary(&astroport::pair::Cw20HookMsg::Swap {
                         belief_price,
                         max_spread,
+                        ask_asset_info: Some(cw_assetinfo_to_astroport(&ask_asset)?),
                         to: None,
                     })?,
                 },
@@ -131,17 +133,14 @@ impl DEX for Astroport {
             offer_assets = vec![offer_asset, Asset::new(ask_asset, simulated_received)];
         }
 
-        let mut astroport_assets = offer_assets
+        let astroport_assets = offer_assets
             .iter()
             .map(cw_asset_to_astroport)
             .collect::<Result<Vec<_>, _>>()?;
 
         // execute msg
         let msg = astroport::pair::ExecuteMsg::ProvideLiquidity {
-            assets: [
-                astroport_assets.swap_remove(0),
-                astroport_assets.swap_remove(0),
-            ],
+            assets: astroport_assets,
             slippage_tolerance: max_spread,
             auto_stake: Some(false),
             receiver: None,
@@ -217,7 +216,7 @@ impl DEX for Astroport {
             .collect::<Result<Vec<_>, _>>()?;
 
         let msg = astroport::pair::ExecuteMsg::ProvideLiquidity {
-            assets: [astroport_assets[0].clone(), astroport_assets[1].clone()],
+            assets: astroport_assets,
             slippage_tolerance: None,
             receiver: None,
             auto_stake: None,
@@ -240,7 +239,9 @@ impl DEX for Astroport {
         #[cfg(not(feature = "testing"))]
         let hook_msg = StubCw20HookMsg::WithdrawLiquidity {};
         #[cfg(feature = "testing")]
-        let hook_msg = astroport::pair::Cw20HookMsg::WithdrawLiquidity { assets: vec![] };
+        let hook_msg = astroport::pair::Cw20HookMsg::WithdrawLiquidity {
+            assets: vec![AssetInfo:],
+        };
 
         let withdraw_msg = lp_token.send_msg(pair_address, to_binary(&hook_msg)?)?;
         Ok(vec![withdraw_msg])
@@ -263,6 +264,7 @@ impl DEX for Astroport {
             pair_address.to_string(),
             &astroport::pair::QueryMsg::Simulation {
                 offer_asset: cw_asset_to_astroport(&offer_asset)?,
+                ask_asset_info: Some(cw_assetinfo_to_astroport(&_ask_asset)?),
             },
         )?)?;
         // commission paid in result asset
@@ -270,6 +272,19 @@ impl DEX for Astroport {
     }
 }
 
+fn cw_assetinfo_to_astroport(
+    asset_info: &AssetInfo,
+) -> Result<astroport::asset::AssetInfo, DexError> {
+    match asset_info {
+        AssetInfo::Native(denom) => Ok(astroport::asset::AssetInfo::NativeToken {
+            denom: denom.clone(),
+        }),
+        AssetInfo::Cw20(contract_addr) => Ok(astroport::asset::AssetInfo::Token {
+            contract_addr: contract_addr.clone(),
+        }),
+        _ => todo!(),
+    }
+}
 fn cw_asset_to_astroport(asset: &Asset) -> Result<astroport::asset::Asset, DexError> {
     match &asset.info {
         AssetInfoBase::Native(denom) => Ok(astroport::asset::Asset {

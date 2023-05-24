@@ -24,7 +24,7 @@ crate-type = ["cdylib", "rlib"]
 [features]
 export = []
 default = ["export"]
-boot = ["dep:boot-core", "dep:abstract-boot"]
+boot = ["dep:boot-core", "dep:abstract-boot", "export"]
 juno = [
   "dep:wasmswap",
   "dep:cw20_junoswap",
@@ -75,7 +75,7 @@ osmosis-std = { version = "0.12.0", optional = true }
 # Terra #
 
 # see https://github.com/astroport-fi/astroport-changelog
-astroport = { git = "https://github.com/astroport-fi/astroport-core.git", rev = "126d43216111df786472fe2a845c1e2fadfe4a36", optional = true }
+astroport = { git = "https://github.com/astroport-fi/astroport-core.git", tag = "v2.8.0", optional = true }
 
 [dev-dependencies]
 anyhow = { workspace = true }
@@ -94,5 +94,5 @@ cw-staking = { path = ".", features = [
 ], package = "abstract-cw-staking-api" }
 abstract-sdk = { workspace = true, features = ["test-utils"] }
 abstract-testing = { workspace = true }
-wyndex-bundle = { git = "https://github.com/AbstractSDK/integration-bundles.git"}
+wyndex-bundle = { git = "https://github.com/AbstractSDK/integration-bundles.git" }
 boot-cw-plus = { workspace = true }
