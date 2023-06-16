@@ -1,4 +1,4 @@
-# Apis
+# Apis [DEPRECATED]
 
 <a href="https://codecov.io/gh/AbstractSDK/apis" > 
  <img src="https://codecov.io/gh/AbstractSDK/apis/branch/main/graph/badge.svg?token=JIGGY3O2I7"/> 
